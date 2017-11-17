@@ -1,0 +1,22 @@
+{
+  "name": "pro-jek",
+  "version": "1.0.0",
+  "description": "Website ojek online sederhana",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "http://gitlab.informatika.org/IF3110-2017-K01-brightfuture/TugasBesar3_2017.git"
+  },
+  "author": "Taufan Mahaputra, Harum Lokawati, Martin Lutta",
+  "license": "MIT",
+  "dependencies": {
+    "body-parser": "^1.18.2",
+    "cors": "^2.8.4",
+    "express": "^4.16.2",
+    "mongoose": "^4.13.3"
+  }
+}
