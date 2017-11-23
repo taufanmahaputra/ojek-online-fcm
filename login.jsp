@@ -24,15 +24,16 @@
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
     <script src="javascript/login.js"></script>
     
-  <link rel="manifest" href="javscript/manifest.json">
+  <link rel="manifest" href="javascript/manifest.json">
 </head>
 <body>
 	<%
+	String token = null;
 	if (request.getParameter("username") != null) {
 		//retrieve data
 		String username = request.getParameter("username");
 		String password = request.getParameter("password");
-		
+		String tokenFCM = request.getParameter("tokenFCM");
 		//make json object
 		JSONObject account = new JSONObject();
 		account.put("username", username);
@@ -66,13 +67,14 @@
 		    JSONObject jsonObject = new JSONObject(sb.toString());
 		    
 		    //extract token
-			String token = jsonObject.getString("token");
+			token = jsonObject.getString("token");
 			String expiry_time = jsonObject.getString("expiry_time");
 			session.setAttribute("token", token);
-			session.setAttribute("expiry_time", expiry_time);
+			session.setAttribute("tokenFCM", tokenFCM);
+			session.setAttribute("expiry_time", expiry_time);				
 			//redirect
 	        response.setStatus(response.SC_MOVED_TEMPORARILY);
-	        response.setHeader("Location", "http://localhost:8080/Client/selectdestination.jsp");
+	        response.setHeader("Location", "http://localhost:8080/loginredirect.jsp");
 		} else {
 		    %> <script> alert("Wrong password / username") </script> <%
 		}  
@@ -83,7 +85,7 @@
  	<div class="login" id="form-login">
  		<h2 class="title">---LOGIN---</h2>
     <form method="POST" action="login.jsp" name="form-login" enctype='application/json'>
-    	<input type="hidden" value="" id="tokenfcm" name="tokenfcm">
+    	<input type="hidden" id="tokenFCM" value="" name="tokenFCM">
    		<div class="input-form">
    			<div class="label">
    				<p style="width: 120px;">Username</p>
