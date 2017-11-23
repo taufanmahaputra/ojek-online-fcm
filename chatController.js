@@ -21,13 +21,32 @@ app.controller('chatController', function($scope) {
 		$scope.textbox = '';
     };
 });
+
 function findOrder(){
 	document.getElementById("findorder").style.display = "none";
 	document.getElementById("findingordertext").style.display = "block";
 	document.getElementById("loader").style.display = "block";
 	document.getElementById("cancelfinding").style.display = "block";
 	myVar = setTimeout(showChat, 3000);
+	var currentUsername = document.getElementById("username").value;
+	
+	$.ajax({
+		type: "POST",
+		url: "http://localhost:3100/findingOrder",
+		data: {
+			username: currentUsername,
+			},
+		datatype: "json",
+		success : function(data, status){
+			    alert("username : " + username);
+		},
+		error: function(err) {
+			console.log(err);
+		}
+});
 }
+
+
 function cancelFinding(){
 	clearTimeout(myVar);
 	document.getElementById("findorder").style.display = "block";
