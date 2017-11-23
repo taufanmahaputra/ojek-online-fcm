@@ -15,11 +15,22 @@ app.set('views','./views');
 var mongoose = require('mongoose');
 mongoose.connect('mongodb://localhost:27017/PROJEK');
 
+// Schema user finding order
 var findingOrderSchema = mongoose.Schema({
   username: String,
 });
 
 var findingOrder  = mongoose.model("findingOrder", findingOrderSchema);
+
+// Schema user login
+var loginSchema = mongoose.Schema({
+  username: String,
+  tokenFCM: String
+});
+
+var login  = mongoose.model("login", loginSchema);
+
+
 //const messaging = firebase.messaging();
 //console.log(messaging);
 
@@ -65,17 +76,32 @@ app.post('/findingOrder', function(req, res){
 });
 
 app.get('/findingOrders', function(req, res){  
-    findingOrder.find(function(err, response){
-    res.json(response);
-     });
-    }
+  findingOrder.find(function(err, response){
+  res.json(response);
+   });
+  }
 );
 
-app.get('/drivers', (req, res) => {
-  res.json(findingOrder)
-} )
-
-app.get('/drivers', (req, res) => {
-  res.json(findingOrder)
-} )
-
+app.post('/online', function(req, res){  
+  var loginInfo = req.body;
+  
+  console.log("MASUK");
+  if(!loginInfo.username || !loginInfo.tokenFCM) {
+    console.log("Sorry, you provided worng info" + loginInfo.username);
+  } else {
+     var newLogin = new login({
+        username: loginInfo.username,
+        tokenFCM : loginInfo.tokenFCM
+     });
+   
+      newLogin.save(function(err, login){
+        if(err)
+          console.log("GAGAL");
+        else
+          console.log("SUKSES"); 
+      });
+    res.json({
+      msg : "success username and tokenFCM"
+    });
+    }
+});
