@@ -15,6 +15,7 @@
 <link rel="stylesheet" type="text/css" href="style/kepala.css">
 <link rel="stylesheet" type="text/css" href="style/chat.css">
 <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.1/angular.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>Order</title>
 <script src="js/validateform.js"></script>
@@ -47,7 +48,8 @@
 	%>	
 <body ng-app="chatApp" ng-controller="chatController">
 	<div>
-		<p id="hi_username">Hi, <b></b> !</p>
+		<p id="hi_username">Hi, <b><%=profile.getUsername() %></b> !</p>
+		<input type="hidden" id="username" value="<%= profile.getUsername()%>">
 		<h1 id="logo">
 			<span id="labelgreen">PR</span>-<span id="labelred">OJEK</span>
 		</h1>
@@ -61,10 +63,9 @@
 				<td class="rest_activity"><a href="profile.jsp">MY PROFILE</a></td>
 			</tr>
 		</table>
-	
 	<div id="orderforDriver" style="text-align:center;">
 		<p id="lookingfororder">LOOKING FOR AN ORDER</p>
-		<button id="findorder" onclick="findOrder()"><div class="buttontext">FIND ORDER</div></button>
+		<button id="findorder" onclick="findOrder()" type="submit"><div class="buttontext">FIND ORDER</div></button>
 		<div id="findingordertext" style="display:none;">Finding Order....</div>
 		<div id="loader" style="display:none;"></div>
 		<button id="cancelfinding" style="display:none;"onclick="cancelFinding()"><div class="buttontext">CANCEL</div></button>
