@@ -12,6 +12,8 @@ var app = express();
 
 // Import models
 const Message = require('./models/message');
+const findingOrder = require('./models/driver');
+const login = require('./models/user');
 
 // Initialize Firebase
 var serviceAccount = require("./pro-jek-wbd-firebase.json");
@@ -109,6 +111,69 @@ app.get('/messages', (req, res) => {
   })
 });
 
+
+
+app.post('/findingOrder', function(req, res){
+  var findingOrderInfo = req.body; //Get the parsed information
+  
+  if(!findingOrderInfo.username){
+        console.log("Sorry, you provided worng info" + findingOrderInfo.username);
+  } else {
+     var newfindingOrder = new findingOrder({
+        username: findingOrderInfo.username,
+     });
+   
+      newfindingOrder.save(function(err, findingOrder){
+        if(err)
+          console.log("GAGAL");
+        else
+          console.log("SUKSES"); 
+      });
+    res.json({
+      msg : "success saved online driver"
+    });
+    }
+});
+
+app.get('/findingOrders', function(req, res){  
+  findingOrder.find(function(err, response){
+  res.json(response);
+   });
+  }
+);
+
+
+app.get('/onlines', function(req, res){  
+  login.find(function(err, response){
+  res.json(response);
+   });
+  }
+);
+
+
+app.post('/online', function(req, res){  
+  var loginInfo = req.body;
+  
+  console.log("MASUK");
+  if(!loginInfo.username || !loginInfo.tokenFCM) {
+    console.log("Sorry, you provided wrong info" + loginInfo.username);
+  } else {
+     var newLogin = new login({
+        username: loginInfo.username,
+        tokenFCM : loginInfo.tokenFCM
+     });
+   
+      newLogin.save(function(err, login){
+        if(err)
+          console.log("GAGAL");
+        else
+          console.log("SUKSES"); 
+      });
+    res.json({
+      msg : "success username and tokenFCM"
+    });
+    }
+});
 
 
 
