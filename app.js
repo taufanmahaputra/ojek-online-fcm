@@ -82,6 +82,14 @@ app.get('/findingOrders', function(req, res){
   }
 );
 
+app.get('/online', function(req, res){  
+  login.find(function(err, response){
+  res.json(response);
+   });
+  }
+);
+
+
 app.post('/online', function(req, res){  
   var loginInfo = req.body;
   
@@ -104,4 +112,32 @@ app.post('/online', function(req, res){
       msg : "success username and tokenFCM"
     });
     }
+});
+
+app.post('/logout', function(req,res) {
+  var logoutInfo = req.body;
+  var message = "";
+
+  if(!logoutInfo.username){
+    message = "Sorry, " + logoutInfo.username + " is not online";
+  } else {
+    login.findOneAndRemove({username: logoutInfo.username});
+    message = logoutInfo.username + 'has logged out';
+  }
+  res.send(message);
+  console.log(message);
+});
+
+app.post('/foundOrder', function(req, res) {
+  var foundOrderInfo = req.body;
+  var message = "";
+
+  if(!foundOrderInfo.username){
+    message = "Sorry, " + foundOrderInfo.username + " is not not finding order";
+  } else {
+    findingOrder.findOneAndRemove({username: foundOrderInfo.username});
+    message = foundOrderInfo.username + 'is no longer finding order';
+  }
+  res.send(message);
+  console.log(message);
 });
