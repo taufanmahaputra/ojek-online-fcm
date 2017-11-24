@@ -62,9 +62,28 @@ router.get('/', (req, res) => {
 
 router.post('/', (req, res) => {
   console.log(req.body);
-  registrationToken = req.body.token;
   user_sender = req.body.user_sender;
+  user_receiver = req.body.user_receiver;
   message_body = req.body.message;
+
+  // Find receiver token FCM
+  login.find({username : user_receiver} , (err, message) => {
+    console.log("Token FCM receiver: " + message[0].tokenFCM);
+    registrationToken = message[0].tokenFCM;
+
+
+    // Send a message to the device corresponding to the provided
+    // registration token.
+    firebase.messaging().sendToDevice(registrationToken, payload)
+    .then(function(response) {
+      // See the MessagingDevicesResponse reference documentation for
+      // the contents of response.
+      console.log("Successfully sent message:", response);
+    })
+    .catch(function(error) {
+      console.log("Error sending message:", error);
+    });
+  });
 
   payload.notification.title = "Message from ";
   payload.notification.title += user_sender;
@@ -72,22 +91,12 @@ router.post('/', (req, res) => {
 
   payload.data.sender = user_sender;
   
-  // Send a message to the device corresponding to the provided
-  // registration token.
-  firebase.messaging().sendToDevice(registrationToken, payload)
-  .then(function(response) {
-    // See the MessagingDevicesResponse reference documentation for
-    // the contents of response.
-    console.log("Successfully sent message:", response);
-  })
-  .catch(function(error) {
-    console.log("Error sending message:", error);
-  });
+
 
   // Save history chat
   let newMessage = new Message({
     sender_name: user_sender,
-    receiver_name: registrationToken,
+    receiver_name: user_receiver,
     message: message_body 
   });
 
@@ -130,6 +139,8 @@ router.get('/findingOrders', function(req, res){
 router.post('/findingOrder', function(req, res){
   var findingOrderInfo = req.body; //Get the parsed information
   
+  console.log('Driver online');
+
   if(!findingOrderInfo.username){
         console.log("Sorry, you provided worng info" + findingOrderInfo.username);
   } else {
