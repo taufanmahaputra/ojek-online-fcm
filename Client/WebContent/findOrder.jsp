@@ -46,10 +46,9 @@
 		Profile profile = new Profile();
 		profile = ps.getProfileInfo(userid);
 	%>	
-<body ng-app="chatApp" ng-controller="chatController">
+<body ng-app="chatApp" ng-controller="chatController" data-ng-init="user_sender='<%=profile.getUsername()%>';user_reciever='dumpusername';init();">
 	<div>
 		<p id="hi_username">Hi, <b><%=profile.getUsername() %></b> !</p>
-		<input type="hidden" id="username" value="<%= profile.getUsername()%>">
 		<h1 id="logo">
 			<span id="labelgreen">PR</span>-<span id="labelred">OJEK</span>
 		</h1>
@@ -70,16 +69,17 @@
 		<div id="loader" style="display:none;"></div>
 		<button id="cancelfinding" style="display:none;"onclick="cancelFinding()"><div class="buttontext">CANCEL</div></button>
 	</div>
+	<input type="hidden" id="username" value="<%= profile.getUsername()%>">
 	<div id="chatarea" ng-model="chatarea" style="display:none;">
 		<div class="chatcontainer">
 			<div ng-repeat="message in messages track by $index">
 				<div ng-if="message.sender == '<%=profile.getUsername()%>'">
 					<div class="namesender"><%out.print(profile.getUsername()); %></div>
-					<div class="chatbox sentbox">{{message.body}}</div>
+					<div class="chatbox sentbox">{{message.message}}</div>
 				</div>
 				<div ng-if="message.sender != '<%=profile.getUsername()%>'">
 					<div class="namedriver"><%out.print("cuks"); %></div>
-					<div class="chatbox recievedbox">{{message.body}}</div>
+					<div class="chatbox recievedbox">{{message.message}}</div>
 				</div>
 			</div>
 <!-- 			<div class="chatbox sentbox">Hallo disana apakash kalian baik-baik saja, saya sendirian disini</div> -->
