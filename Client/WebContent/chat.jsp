@@ -18,9 +18,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>Order</title>
 <script src="js/validateform.js"></script>
-<script src="javascript/chatController.js"></script>
 </head>
-<body ng-app="chatApp" ng-controller="chatController" onload="load()">
 <%  
 		int userid = 1;
 		String pick = request.getParameter("pick"), 
@@ -52,6 +50,7 @@
 		Profile driver = new Profile();
 		driver = ps.getProfileInfo(driverid);
 	%>	
+<body ng-app="chatApp" ng-controller="chatController" data-ng-init="user_sender='<%=profile.getUsername()%>';user_reciever='<%=driver.getUsername()%>';init();">
 	<div>
 		<p id="hi_username">Hi, <b></b> !</p>
 		<h1 id="logo">
@@ -98,16 +97,17 @@
 		</table>
 		<p id="makeanorder" >MAKE AN ORDER</p>
 	</div>
+	<input type="hidden" id="username" value="<%= profile.getUsername()%>">
 	<div id="chatarea" ng-model="chatarea">
 		<div class="chatcontainer">
 			<div ng-repeat="message in messages track by $index">
 				<div ng-if="message.sender == '<%=profile.getUsername()%>'">
 					<div class="namesender"><%out.print(profile.getUsername()); %></div>
-					<div class="chatbox sentbox">{{message.body}}</div>
+					<div class="chatbox sentbox">{{message.message}}</div>
 				</div>
 				<div ng-if="message.sender != '<%=profile.getUsername()%>'">
-					<div class="namedriver"><%out.print(driver.getUsername()); %></div>
-					<div class="chatbox recievedbox">{{message.body}}</div>
+					<div class="namedriver"><%=(driver.getUsername()) %></div>
+					<div class="chatbox recievedbox">{{message.message}}</div>
 				</div>
 			</div>
 <!-- 			<div class="chatbox sentbox">Hallo disana apakash kalian baik-baik saja, saya sendirian disini</div> -->
@@ -121,6 +121,6 @@
 	<form action='completeorder.jsp' method='POST' style="text-align:center;">
 			<button name='driverid' value="<%=driverid%>" id="closebutton"> <div class="buttontext">CLOSE</div></button>
 	</form>
-	
+	<script src="javascript/chatController.js"></script>
 </body>
 </html>
