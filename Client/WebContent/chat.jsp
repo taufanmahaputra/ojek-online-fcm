@@ -18,6 +18,10 @@
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>Order</title>
 <script src="js/validateform.js"></script>
+<script src="https://www.gstatic.com/firebasejs/4.6.2/firebase.js"></script>
+<script src="https://www.gstatic.com/firebasejs/4.6.2/firebase-messaging.js"></script>
+<script src="https://cdn.rawgit.com/Luegg/angularjs-scroll-glue/master/src/scrollglue.js"></script>
+<script src="node_modules/angularjs-scroll-glue/src/scrollglue.js"></script>
 </head>
 <%  
 		int userid = 1;
@@ -50,7 +54,7 @@
 		Profile driver = new Profile();
 		driver = ps.getProfileInfo(driverid);
 	%>	
-<body ng-app="chatApp" ng-controller="chatController" data-ng-init="user_sender='<%=profile.getUsername()%>';user_reciever='<%=driver.getUsername()%>';init();">
+<body ng-app="chatApp" ng-controller="chatController" data-ng-init="user_sender='<%=profile.getUsername()%>';user_receiver='<%=driver.getUsername()%>';init();">
 	<div>
 		<p id="hi_username">Hi, <b></b> !</p>
 		<h1 id="logo">
@@ -99,13 +103,13 @@
 	</div>
 	<input type="hidden" id="username" value="<%= profile.getUsername()%>">
 	<div id="chatarea" ng-model="chatarea">
-		<div class="chatcontainer">
+		<div id="chatcontainer" class="chatcontainer" scroll-glue>
 			<div ng-repeat="message in messages track by $index">
-				<div ng-if="message.sender == '<%=profile.getUsername()%>'">
+				<div ng-if="((message.user_sender == '<%=profile.getUsername()%>')&&(message.user_receiver == '<%=driver.getUsername()%>'))">
 					<div class="namesender"><%out.print(profile.getUsername()); %></div>
 					<div class="chatbox sentbox">{{message.message}}</div>
 				</div>
-				<div ng-if="message.sender != '<%=profile.getUsername()%>'">
+				<div ng-if="((message.user_sender == '<%=driver.getUsername()%>')&&(message.user_receiver == '<%=profile.getUsername()%>'))">
 					<div class="namedriver"><%=(driver.getUsername()) %></div>
 					<div class="chatbox recievedbox">{{message.message}}</div>
 				</div>
@@ -119,7 +123,7 @@
 		</form>
 	</div>
 	<form action='completeorder.jsp' method='POST' style="text-align:center;">
-			<button name='driverid' value="<%=driverid%>" id="closebutton"> <div class="buttontext">CLOSE</div></button>
+			<button name='driverid' value="<%=driverid%>" id="closebutton" ng-click="closechat()"> <div class="buttontext">CLOSE</div></button>
 	</form>
 	<script src="javascript/chatController.js"></script>
 </body>

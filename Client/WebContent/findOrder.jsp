@@ -19,7 +19,11 @@
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>Order</title>
 <script src="js/validateform.js"></script>
+<script src="https://www.gstatic.com/firebasejs/4.6.2/firebase.js"></script>
+<script src="https://www.gstatic.com/firebasejs/4.6.2/firebase-messaging.js"></script>
+<script src="https://cdn.rawgit.com/Luegg/angularjs-scroll-glue/master/src/scrollglue.js"></script>
 <script src="javascript/chatController.js"></script>
+<script src="node_modules/angularjs-scroll-glue/src/scrollglue.js"></script>
 </head>
 <%  
 		int userid = 1;
@@ -46,7 +50,7 @@
 		Profile profile = new Profile();
 		profile = ps.getProfileInfo(userid);
 	%>	
-<body ng-app="chatApp" ng-controller="chatController" data-ng-init="user_sender='<%=profile.getUsername()%>';user_reciever='dumpusername';init();">
+<body ng-app="chatApp" ng-controller="chatController" data-ng-init="user_sender='<%=profile.getUsername()%>';user_receiver='';init();">
 	<div>
 		<p id="hi_username">Hi, <b><%=profile.getUsername() %></b> !</p>
 		<h1 id="logo">
@@ -63,22 +67,24 @@
 			</tr>
 		</table>
 	<div id="orderforDriver" style="text-align:center;">
-		<p id="lookingfororder">LOOKING FOR AN ORDER</p>
-		<button id="findorder" onclick="findOrder()" type="submit"><div class="buttontext">FIND ORDER</div></button>
+		<p id="lookingfororder" style="text-align:left">LOOKING FOR AN ORDER</p>
+		<button id="findorder" ng-click="findOrder()" type="submit"><div class="buttontext">FIND ORDER</div></button>
 		<div id="findingordertext" style="display:none;">Finding Order....</div>
 		<div id="loader" style="display:none;"></div>
-		<button id="cancelfinding" style="display:none;"onclick="cancelFinding()"><div class="buttontext">CANCEL</div></button>
+		<button id="cancelfinding" ng-click="cancelFinding()" style="display:none;"><div class="buttontext">CANCEL</div></button>
+		<input type="hidden" id="username" value="<%= profile.getUsername()%>">
+		<div id="gotanorder" class="gotanorder" style="display:none;">Got an Order!</div>
+		<div id="customer" class="customer" style="display:none;">{{users.receiver}}</div>
 	</div>
-	<input type="hidden" id="username" value="<%= profile.getUsername()%>">
 	<div id="chatarea" ng-model="chatarea" style="display:none;">
-		<div class="chatcontainer">
+		<div id="chatcontainer" class="chatcontainer" scroll-glue>
 			<div ng-repeat="message in messages track by $index">
-				<div ng-if="message.sender == '<%=profile.getUsername()%>'">
+				<div ng-if="((message.user_sender == '<%=profile.getUsername()%>')&&(message.user_receiver == users.receiver))">
 					<div class="namesender"><%out.print(profile.getUsername()); %></div>
 					<div class="chatbox sentbox">{{message.message}}</div>
 				</div>
-				<div ng-if="message.sender != '<%=profile.getUsername()%>'">
-					<div class="namedriver"><%out.print("cuks"); %></div>
+				<div ng-if="((message.user_sender == users.receiver)&&(message.user_receiver == '<%=profile.getUsername()%>'))">
+					<div class="namedriver">{{users.receiver}}</div>
 					<div class="chatbox recievedbox">{{message.message}}</div>
 				</div>
 			</div>

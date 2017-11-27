@@ -98,7 +98,6 @@
 	<div class="driverblock">
 		<h2 class="title_driver">PREFERRED DRIVERS:</h2>
 		<div class="chosen_driver">
-		
 		<%
 			Babi res = new Babi();
 			System.out.println(prefdriver);
@@ -111,24 +110,30 @@
 				temp = (ArrayList<MapElements>) isi.getItem();
 				for (MapElements konten : temp) { 
 					hasil.put(konten.getKey(), konten.getValue());
-				}
+				}  
+				Profile driver = new Profile();
+				driver = ps.getProfileInfo(Integer.parseInt(hasil.get("id_driver")));
 				%>
-			
-				<table>
-					<tr>
-						<td><img src='<%= hasil.get("prof_pic")  %>'></td>
-						<td id='driver_identification'>
-							<span id='driver_name'><%= hasil.get("name")  %></span><br>
-							<span id='driver_rating'>☆ <%= Float.parseFloat(hasil.get("avgrating"))  %></span> 
-							(<%= hasil.get("num_votes") %> votes) <br>
-							<form action='chat.jsp' method='POST'>
-								<input type="hidden" name="pick" value="<%=pick%>">
-								<input type="hidden" name="dest" value="<%=dest%>">
-								<button name='driverid' value='<%=hasil.get("id_driver")%>'>I CHOOSE YOU!</button>
-							</form>
-						</td>
-					</tr>
-				</table>	
+				
+				<div ng-repeat="finding in findingOrders track by $index">
+					<div ng-if="finding == '<%=driver.getUsername() %>'">
+						<table>
+							<tr>
+								<td><img src='<%= hasil.get("prof_pic")  %>'></td>
+								<td id='driver_identification'>
+									<span id='driver_name'><%= hasil.get("name")  %></span><br>
+									<span id='driver_rating'>☆ <%= Float.parseFloat(hasil.get("avgrating"))  %></span> 
+									(<%= hasil.get("num_votes") %> votes) <br>
+									<form action='chat.jsp' method='POST'>
+										<input type="hidden" name="pick" value="<%=pick%>">
+										<input type="hidden" name="dest" value="<%=dest%>">
+										<button name='driverid' value='<%=hasil.get("id_driver")%>' ng-click="chooseDriver('<%=driver.getUsername()%>')">I CHOOSE YOU!</button>
+									</form>
+								</td>
+							</tr>
+						</table>
+					</div>
+				</div>
 				
 		<%	} %>
 		</div>
@@ -149,23 +154,30 @@
 				temp = (ArrayList<MapElements>) isi.getItem();
 				for (MapElements konten : temp) { 
 					hasil.put(konten.getKey(), konten.getValue());
-				} %>
-			
-				<table>
-					<tr>
-						<td><img src='<%= hasil.get("prof_pic")  %>'></td>
-						<td id='driver_identification'>
-							<span id='driver_name'><%= hasil.get("name")  %></span><br>
-							<span id='driver_rating'>☆ <%= Float.parseFloat(hasil.get("avgrating"))  %></span> 
-							(<%= hasil.get("num_votes") %> votes) <br>
-							<form action='chat.jsp' method='POST'>
-								<input type="hidden" name="pick" value="<%=pick%>">
-								<input type="hidden" name="dest" value="<%=dest%>">
-								<button name='driverid' value='<%=hasil.get("id_driver")%>'>I CHOOSE YOU!</button>
-							</form>
-						</td>
-					</tr>
-				</table>	
+				}
+				Profile driver = new Profile();
+				driver = ps.getProfileInfo(Integer.parseInt(hasil.get("id_driver")));
+				%>
+				<div ng-show="false" ng-model="driverusername" id="driverusername" value="<%=driver.getUsername() %>"></div>
+				<div ng-repeat="finding in findingOrders track by $index">
+					<div ng-if="finding == '<%=driver.getUsername() %>'">
+						<table>
+							<tr>
+								<td><img src='<%= hasil.get("prof_pic")  %>'></td>
+								<td id='driver_identification'>
+									<span id='driver_name'><%= hasil.get("name")  %></span><br>
+									<span id='driver_rating'>☆ <%= Float.parseFloat(hasil.get("avgrating"))  %></span> 
+									(<%= hasil.get("num_votes") %> votes) <br>
+									<form action='chat.jsp' method='POST'>
+										<input type="hidden" name="pick" value="<%=pick%>">
+										<input type="hidden" name="dest" value="<%=dest%>">
+										<button name='driverid' value='<%=hasil.get("id_driver")%>' ng-click="chooseDriver('<%=driver.getUsername()%>')" >I CHOOSE YOU!</button>
+									</form>
+								</td>
+							</tr>
+						</table>
+					</div>
+				</div>
 				
 		<%	}
 		%>
