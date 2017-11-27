@@ -159,6 +159,8 @@
 							<span id='driver_rating'>☆ <%= Float.parseFloat(hasil.get("avgrating"))  %></span> 
 							(<%= hasil.get("num_votes") %> votes) <br>
 							<form action='chat.jsp' method='POST'>
+								<input type="hidden" name="pick" value="<%=pick%>">
+								<input type="hidden" name="dest" value="<%=dest%>">
 								<button name='driverid' value='<%=hasil.get("id_driver")%>'>I CHOOSE YOU!</button>
 							</form>
 						</td>
