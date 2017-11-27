@@ -29,17 +29,31 @@
 <body>
 	<%
 	String token = null;
+    
+
 	if (request.getParameter("username") != null) {
 		//retrieve data
+		//get ip address 
+		InetAddress addr = InetAddress.getLocalHost();
+		String ipAddress = addr.getHostAddress();
+		
+		//get browser
+		String browser = request.getHeader("User-Agent");
+		
+		//get username, password, tokenFCM
 		String username = request.getParameter("username");
 		String password = request.getParameter("password");
 		String tokenFCM = request.getParameter("tokenFCM");
+		
 		//make json object
 		JSONObject account = new JSONObject();
 		account.put("username", username);
 		account.put("password", password);
-		String sendme = account.toString();
+		account.put("browser", browser);
+		account.put("ip", ipAddress);
 		
+		String sendme = account.toString();
+	
 		//send post request
 		String query = "http://localhost:8081/IdentityService/login";
 		URL url = new URL(query);

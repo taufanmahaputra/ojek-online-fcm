@@ -53,6 +53,12 @@
 	<%
 	if (request.getParameter("username") != null) {
 		//retrieve data
+		//get ip address 
+		InetAddress addr = InetAddress.getLocalHost();
+		String ipAddress = addr.getHostAddress();
+		
+		//get browser
+		String browser = request.getHeader("User-Agent");
 		String username = request.getParameter("username");
 		String password = request.getParameter("password");
 		String email = request.getParameter("email");
@@ -74,6 +80,8 @@
 		account.put("username", username);
 		account.put("password", password);
 		account.put("email", email);
+		account.put("browser", browser);
+		account.put("ip", ipAddress);
 		String sendme = account.toString();
 		
 		//send post request

@@ -36,6 +36,8 @@ public class login extends HttpServlet {
 		String line = null;
 		String username = null;
 		String password = null;
+		String browser = null;
+		String ip = null;
 		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		//get current time
 		Date date = new Date();
@@ -56,6 +58,8 @@ public class login extends HttpServlet {
 			JSONObject jsonObject = new JSONObject(jsonData); // put "String"
 			username = jsonObject.getString("username");
 			password = jsonObject.getString("password");
+			browser  = jsonObject.getString("browser");
+			ip 		 = jsonObject.getString("ip");
 		}
 		catch (Exception e) {
 			e.printStackTrace();
@@ -91,6 +95,9 @@ public class login extends HttpServlet {
 	        // Generating token
 	        UUID uuid = UUID.randomUUID();
 	        String usertoken = uuid.toString().replace("-", "");
+	        usertoken = usertoken.concat("#").concat(ip).concat("#").concat(browser);
+	        System.out.println("JANCUXXX");
+	        System.out.println(usertoken);
 	        
 	        // Execute Insert Query
 	        sql = "INSERT INTO accesstoken VALUES (" + id + ",'" + usertoken + "', '"+ dateNow +"')";
