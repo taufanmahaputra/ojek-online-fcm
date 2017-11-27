@@ -203,5 +203,42 @@ router.post('/online', function(req, res){
 });
 
 
+router.post('/logout', function(req,res) {
+  var logoutInfo = req.body;
+  var message = "";
+
+  if(!logoutInfo.username){
+    message = "Sorry, " + logoutInfo.username + " is not online";
+  } else {
+    login.remove({ username : logoutInfo.username}, (err, result) => {
+      if(err)
+        console.err(err);
+      else
+        console.log(result);
+    });
+  }
+  res.send(message);
+  console.log(message);
+});
+
+
+router.post('/foundOrder', function(req, res) {
+  var foundOrderInfo = req.body;
+  var message = "";
+
+  if(!foundOrderInfo.username){
+    message = "Sorry, " + foundOrderInfo.username + " is not not finding order";
+  } else {
+    findingOrder.remove({ username : foundOrderInfo.username}, (err, result) => {
+      if(err)
+        console.err(err);
+      else
+        console.log(result);
+    });
+  }
+  res.send(message);
+  console.log(message);
+});
+
 // Export module
 module.exports = router;
